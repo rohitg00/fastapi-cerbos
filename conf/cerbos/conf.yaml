@@ -1,0 +1,25 @@
+---
+server:
+  httpListenAddr: ":3592"
+  adminAPI:
+    enabled: true
+    adminCredentials:
+      username: cerbos
+      passwordHash: JDJ5JDEwJElUMnV4Zy5qL0NOdHV6MEIwLjY0Zy4wdEdzUFplMGpWYW5XLndVemJSYXFQS2R1VFZVZ1guCgo=
+
+storage:
+  driver: "disk" # Valid values are "disk" or "git"
+  disk: # Only required if "driver" is "disk"
+    directory: /policies
+    watchForChanges: true
+schema:
+  enforcement: warn
+
+audit:
+  enabled: true 
+  accessLogsEnabled: true 
+  decisionLogsEnabled: true 
+  backend: local 
+  local: # Configuration for the local audit backend
+    storagePath: /auditlogs # Path to store the data
+    retentionPeriod: 168h # Records older than this will be automatically deletedwarn

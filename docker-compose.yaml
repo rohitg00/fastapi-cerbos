@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  cerbos:
+    image: ghcr.io/cerbos/cerbos:latest
+    ports:
+      - "3593:3593"
+      - "3592:3592"
+    volumes:
+      - ./policies:/policies
+      - ./conf/cerbos:/config
+      # - ./:/data
+    command: server --config=config/conf.yaml
+
+#   cms-mysql:
+#     image: mysql
+#     restart: always
+#     env_file:
+#       - .env
+#     environment:
+#       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+#       MYSQL_DATABASE: ${MYSQL_DB}
+#       MYSQL_USER: ${MYSQL_USER}
+#       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#     volumes:
+#       - cms-mysql-data:/var/lib/mysql
+#     ports:
+#       - "${MYSQL_PORT}:3306"
+# volumes:
+#   cms-mysql-data:

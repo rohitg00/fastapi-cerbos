@@ -1,0 +1,380 @@
+name: VideoTestSuite
+description: Tests for verifying the video resource policy
+resources:
+  video1:
+    id: "123"
+    kind: "video"
+    attr:
+      region: "eu-east-1"
+      ownerId: "sam@cerbos.io"
+
+  video2:
+    id: "124"
+    kind: "video"
+    attr:
+      region: "us-east-1"
+      ownerId: "rim@cerbos.io"
+
+principals:
+  rohit:
+    id: "rohit@cerbos.io"
+    roles: ["user"]
+    attr:
+      region: "eu-east-1"
+
+  ketty:
+    id: "ketty@cerbos.io"
+    roles: [ "user" ]
+    attr:
+      region: "us-east-1"
+
+  john:
+    id: "john@cerbos.io"
+    roles: [ "manager" ]
+    attr:
+      region: "eu-east-1"
+
+  clark:
+    id: "clark@cerbos.io"
+    roles: [ "manager" ]
+    attr:
+      region: "us-east-1"
+
+  bradley:
+    id: "bradley@cerbos.io"
+    roles: ["admin"]
+    attr:
+      region: "us-east-1"
+
+  dan:
+    id: "dan@cerbos.io"
+    roles: [ "admin"]
+    attr:
+      region: "eu-east-1"
+
+  sam:
+    id: "sam@cerbos.io"
+    roles: [ "user" ]
+    attr:
+      region: "eu-east-1"
+    
+  rim:
+    id: "rim@cerbos.io"
+    roles: [ "user" ]
+    attr:
+      region: "us-east-1"
+
+  auditor1:
+    id: "auditor@google.com"
+    roles: [ "user" ]
+    attr:
+      region: "eu-east-1"
+
+  auditor2:
+    id: "auditor@google.com"
+    roles: [ "user" ]
+    attr:
+      region: "us-east-1"
+
+  auditor3:
+    id: "auditor@google.com"
+    roles: [ "manager" ]
+    attr:
+      region: "eu-east-1"
+
+  auditor4:
+    id: "auditor@google.com"
+    roles: [ "manager" ]
+    attr:
+      region: "us-east-1"
+
+  auditor5:
+    id: "auditor@google.com"
+    roles: [ "admin" ]
+    attr:
+      region: "eu-east-1"
+
+  auditor6:
+    id: "auditor@google.com"
+    roles: [ "admin" ]
+    attr:
+      region: "us-east-1"
+
+tests:
+  - name: Read, Create, Update and Delete Video
+    input: &testInput
+      principals:
+        - rohit
+        - ketty
+        - john
+        - clark
+        - bradley
+        - dan
+        - sam
+        - rim
+        - auditor1
+        - auditor2
+        - auditor3
+        - auditor4
+        - auditor5
+        - auditor6
+      actions:
+        - "read"
+        - "create"
+        - "update"
+        - "delete"
+      resources:
+        - video1
+        - video2
+    expected:
+      - &viewExp
+        principal: rohit
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: ketty
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: john
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: clark
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: bradley
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: dan
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: sam
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: rim
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: auditor1
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor2
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor3
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor4
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor5
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor6
+        resource: video1
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: rohit
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: ketty
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: john
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: clark
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: bradley
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: dan
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: sam
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_DENY
+
+      - <<: *viewExp
+        principal: rim
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_DENY
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor1
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor2
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor3
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor4
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor5
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW
+
+      - <<: *viewExp
+        principal: auditor6
+        resource: video2
+        actions:
+          read: EFFECT_ALLOW
+          create: EFFECT_ALLOW
+          update: EFFECT_ALLOW
+          delete: EFFECT_ALLOW

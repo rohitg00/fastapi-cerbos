@@ -1,0 +1,10 @@
+apiVersion: api.cerbos.dev/v1
+principalPolicy:
+  version: default
+  principal: auditor@google.com
+  rules:
+    - resource: video
+      actions:
+        - action: "*"
+          effect: EFFECT_ALLOW
+          

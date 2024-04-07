@@ -1,0 +1,39 @@
+apiVersion: api.cerbos.dev/v1
+resourcePolicy:
+  version: default
+  importDerivedRoles:
+    - common_roles
+
+  resource: video
+  rules:
+    - actions: ["read", "create"]
+      effect: EFFECT_ALLOW
+      roles:
+        - manager
+        - user
+
+    - actions: ["delete"]
+      effect: EFFECT_ALLOW
+      derivedRoles:
+        - owner
+
+    - actions: ["update"]
+      effect: EFFECT_ALLOW
+      roles:
+        - manager
+      condition:
+        match:
+          expr: request.resource.attr.region == request.principal.attr.region
+
+    - actions: ["read", "create", "update", "delete"]
+      effect: EFFECT_ALLOW
+      roles:
+        - admin
+  
+  schemas:
+    principalSchema:
+      ref: cerbos:///principal.json
+    resourceSchema:
+      ref: cerbos:///video.json
+      ignoreWhen:
+        actions: [ 'create' ]
