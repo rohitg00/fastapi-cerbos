@@ -1,0 +1,153 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastapi-cerbos-demo-config
+  labels:
+    app.kubernetes.io/name: fastapi-cerbos-demo
+    app.kubernetes.io/component: cerbos
+data:
+  "config.yaml": |-
+      server:
+        httpListenAddr: ":3592"
+        adminAPI:
+          enabled: true
+          adminCredentials:
+            username: cerbos
+            passwordHash: JDJ5JDEwJElUMnV4Zy5qL0NOdHV6MEIwLjY0Zy4wdEdzUFplMGpWYW5XLndVemJSYXFQS2R1VFZVZ1guCgo=
+      storage:
+        driver: "disk" 
+        disk: 
+          directory: /policies
+          watchForChanges: true
+      schema:
+        enforcement: warn
+      audit:
+        enabled: true 
+        accessLogsEnabled: true 
+        decisionLogsEnabled: true 
+        backend: file 
+        file:
+          path: stdout
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastapi-cerbos-demo-policies
+  labels:
+    app.kubernetes.io/name: fastapi-cerbos-demo
+    app.kubernetes.io/component: cerbos
+data:
+  "common_roles.yaml": |-
+    apiVersion: api.cerbos.dev/v1
+    description: |-
+      Common dynamic roles used within this Demo app
+    derivedRoles:
+      name: common_roles
+      definitions:
+        - name: owner
+          parentRoles: 
+            - user
+          condition:
+            match:
+              expr: request.resource.attr.ownerId == request.principal.id
+
+  "principal_policy.yaml": |-
+    apiVersion: api.cerbos.dev/v1
+    principalPolicy:
+      version: default
+      principal: auditor@google.com
+      rules:
+        - resource: video
+          actions:
+            - action: "*"
+              effect: EFFECT_ALLOW
+  "resource_policy.yaml": |-
+    apiVersion: api.cerbos.dev/v1
+    resourcePolicy:
+      version: default
+      importDerivedRoles:
+        - common_roles
+
+      resource: video
+      rules:
+        - actions: ["read", "create"]
+          effect: EFFECT_ALLOW
+          roles:
+            - manager
+            - user
+
+        - actions: ["delete"]
+          effect: EFFECT_ALLOW
+          derivedRoles:
+            - owner
+
+        - actions: ["update"]
+          effect: EFFECT_ALLOW
+          roles:
+            - manager
+          condition:
+            match:
+              expr: request.resource.attr.region == request.principal.attr.region
+
+        - actions: ["read", "create", "update", "delete"]
+          effect: EFFECT_ALLOW
+          roles:
+            - admin
+      schemas:
+        principalSchema:
+          ref: cerbos:///principal.json
+        resourceSchema:
+          ref: cerbos:///video.json
+          ignoreWhen:
+            actions: [ 'create' ]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-cerbos-demo
+  labels:
+    app.kubernetes.io/name: fastapi-cerbos-demo
+    app.kubernetes.io/component: fastapi-cerbos-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fastapi-cerbos-demo
+      app.kubernetes.io/component: fastapi-cerbos-demo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fastapi-cerbos-demo
+        app.kubernetes.io/component: fastapi-cerbos-demo
+    spec:
+      containers:
+        - name: fastapi-cerbos-demo
+          image: "rohitghumare64/fastapi-cerbos-demo:v2"
+          command: ["python", "-m", "gunicorn", "-c", "gunicorn_config.py", "main:app"]
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+        - name: cerbos
+          image: "ghcr.io/cerbos/cerbos:0.34.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - "server"
+            - "--config=/config/config.yaml"
+            - "--log-level=INFO"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: policies
+              mountPath: /policies
+      volumes:
+        - name: sock
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: fastapi-cerbos-demo-config
+        - name: policies
+          configMap:
+            name: fastapi-cerbos-demo-policies

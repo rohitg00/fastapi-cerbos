@@ -116,7 +116,7 @@ Generate JWT Token
 `python scripts/generate_jwt.py 'test@google.com' '["user"]' '{"region":"eu-east-1"}'`
 
 Check Access
-`curl -v -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJDZXJib3MiLCJzdWIiOiJ0ZXN0QGdvb2dsZS5jb20iLCJleHAiOjE3MTIwNTA2MTksImlhdCI6MTcxMTk2NDIxOSwicm9sZXMiOlsidXNlciJdLCJpZCI6IjgwYjM5ODZjLWRmMmQtNDc3Zi04OWQ0LWFjMTM5ZTNhMWYzMCIsImF0dHIiOnsicmVnaW9uIjoiZXUtZWFzdC0xIn19.zp5Zod2wtTBHwTC_74WoJYdMyICfXzGuY4Qsi0AGSyU" http://localhost:8000/api/v1/cms/videos/123/`
+`curl -v -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJDZXJib3MiLCJzdWIiOiJ0ZXN0QGdvb2dsZS5jb20iLCJleHAiOjE3MTI2MTA0MTIsImlhdCI6MTcxMjUyNDAxMiwicm9sZXMiOlsidXNlciJdLCJpZCI6IjhlZDAyNTY5LTg2MjItNGZiMi04NTA5LTE3ZjA3NTVhNjM4OSIsImF0dHIiOnsicmVnaW9uIjoiZXUtZWFzdC0xIn19.9XmXXJZvZBWsJX6zbOedHJ17bpks-23_6Mu-dT4bZ-Q" http://localhost:8000/api/v1/cms/videos/123/`
 
 `curl -v -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJDZXJib3MiLCJzdWIiOiJ0ZXN0QGdvb2dsZS5jb20iLCJleHAiOjE3MTIyMTk5MjAsImlhdCI6MTcxMjEzMzUyMCwicm9sZXMiOlsidXNlciJdLCJpZCI6Ijg4NDk0NGQwLTVmOTYtNDgzNC04ZDIxLTgyY2NjMTQwNmQ5MCIsImF0dHIiOnsicmVnaW9uIjoidXMtZWFzdC0xIn19.svI4N3z78YnsnxwWzuuztDs-aRUjJh5OSVjwOihX7J8" http://localhost:8000/api/v1/cms/videos/123/`
 

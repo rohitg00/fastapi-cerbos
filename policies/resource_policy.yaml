@@ -24,7 +24,7 @@ resourcePolicy:
       condition:
         match:
           expr: request.resource.attr.region == request.principal.attr.region
-
+   
     - actions: ["read", "create", "update", "delete"]
       effect: EFFECT_ALLOW
       roles:
